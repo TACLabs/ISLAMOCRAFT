@@ -1,0 +1,4 @@
+name: IslamoCraft
+version: '${project.version}'
+main: islamocraft.islamocraft.IslamoCraft
+api-version: '1.20'

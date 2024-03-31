@@ -1,0 +1,4 @@
+name: IslamoCraft
+version: '1.0-SNAPSHOT'
+main: islamocraft.islamocraft.IslamoCraft
+api-version: '1.20'
