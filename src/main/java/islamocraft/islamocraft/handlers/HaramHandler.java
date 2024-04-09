@@ -38,13 +38,10 @@ public class HaramHandler implements Listener {
         {
             player.getWorld().strikeLightning(player.getLocation());
 
-            Bukkit.broadcastMessage(ChatColor.BOLD + "" + ChatColor.RED + "Le kouffar " + player.getName() + " a mangé du porc ! (+10 Pêchés)");
-            ajouterPechesAuJoueur(player.getUniqueId(), 10);
+            Bukkit.broadcastMessage(ChatColor.BOLD + "" + ChatColor.RED + "Le kouffar " + player.getName() + " a mangé du porc ! (+25 Pêchés)");
+            ajouterPechesAuJoueur(player.getUniqueId(), 25);
         }
     }
-
-    //Quand un joueur ne tue pas un animal en direction de La Mecque
-
 
     //Quand un joueur interagit d'une quelconque manière avec un Jukebox ou un bloc de musique
     @EventHandler

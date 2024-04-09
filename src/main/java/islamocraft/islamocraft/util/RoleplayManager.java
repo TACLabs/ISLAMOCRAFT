@@ -126,6 +126,25 @@ public class RoleplayManager implements Listener {
         return null;
     }
 
+    private static String getNomRpDuJoueur(Connection connexion, UUID identifiant) {
+        String query = "SELECT nom_rp from joueurs WHERE uuid = ?";
+
+        try (PreparedStatement preparedStatement = connexion.prepareStatement(query)) {
+            preparedStatement.setString(1, identifiant.toString());
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    String nom_rp = resultSet.getString("nom_rp");
+                    return nom_rp;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return null;
+    }
+
     private static void sauvegardeDuJoueur(Connection connexion, Player joueur) {
         String query = "";
 
@@ -221,10 +240,10 @@ public class RoleplayManager implements Listener {
             {
                 //Récupérer ses peches et ses hassanates
                 joueurs.put(player.getUniqueId(), getPointsDuJoueur(connexion,player.getUniqueId()));
-                nomsRP.put(player.getUniqueId(), "suce-bite");
+                nomsRP.put(player.getUniqueId(), getNomRpDuJoueur(connexion, player.getUniqueId()));
                 vraisPseudos.put(player.getUniqueId(), player.getDisplayName());
-                player.setDisplayName(nomsRP.get(player.getUniqueId()));
-                player.setPlayerListName(nomsRP.get(player.getUniqueId()));
+                //player.setDisplayName(nomsRP.get(player.getUniqueId()));
+                //player.setPlayerListName(nomsRP.get(player.getUniqueId()));
                 Bukkit.getLogger().info("Retour d'un joueur : " + vraisPseudos.get(player.getUniqueId()) + " (" + nomsRP.get(player.getUniqueId()) + ")");
             }
             else
@@ -233,8 +252,8 @@ public class RoleplayManager implements Listener {
                 joueurs.put(player.getUniqueId(), new PointsDuJoueur(100, 0));
                 nomsRP.put(player.getUniqueId(), NomArabeGenerator.genererNomArabe());
                 vraisPseudos.put(player.getUniqueId(), player.getDisplayName());
-                player.setDisplayName(nomsRP.get(player.getUniqueId()));
-                player.setPlayerListName(nomsRP.get(player.getUniqueId()));
+                //player.setDisplayName(nomsRP.get(player.getUniqueId()));
+                //player.setPlayerListName(nomsRP.get(player.getUniqueId()));
                 Bukkit.getLogger().info("Nouveau joueur : " + vraisPseudos.get(player.getUniqueId()) + " (" + nomsRP.get(player.getUniqueId()) + ")");
             }
 
