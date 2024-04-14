@@ -32,7 +32,7 @@ public class HallalHandler implements Listener
     public static final List<String> MobsPourAbattageRituel = Arrays.asList("COW","SHEEP","CHICKEN","RABBIT","MOOSHROOM");
     private Map<Player, BukkitTask> boussolesMecque = new HashMap<>();
 
-    private boolean ramadanActif = false;
+    private static boolean ramadanActif = false;
     private Random random = new Random();
 
     public HallalHandler(IslamoCraft plugin)
@@ -49,9 +49,19 @@ public class HallalHandler implements Listener
                 commencerLeRamadan();
 
             }
-        }, 0, 1 * 20); // 10 secondes en ticks
+        }, 0, 10 * 20); // 10 secondes en ticks
     }
 
+    public static String cestLeRamadanOuPas() {
+        if(ramadanActif)
+        {
+            return "OUI";
+        }
+        else
+        {
+            return "NON";
+        }
+    }
 
     private void commencerLeRamadan() {
 
@@ -142,7 +152,7 @@ public class HallalHandler implements Listener
         int pechesDeVictime = getMontantPechesDuJoueur(laVictime);
 
         //Si le joueur a été buté et que c'était un kouffar
-        if (lAttaquant != null && pechesDeVictime > 0)
+        if (lAttaquant != null && pechesDeVictime > 0 && (lAttaquant != laVictime))
         {
             Bukkit.broadcastMessage(ChatColor.GREEN + "Le pieux " + lAttaquant.getName() + " a pourfendu le kouffar " + laVictime.getName() + " et a récupéré ses " + pechesDeVictime + " points!");
 
@@ -199,7 +209,18 @@ public class HallalHandler implements Listener
         //Le joueur bute un animal qu'il s'apprête à bouffer
         if(MobsPourAbattageRituel.contains(event.getEntity().getType().toString()))
         {
+            //le joueur est tourné vers La Mecque
+            if(leJoueurEstTourneVersLaMecque(leJoueur))
+            {
+                ajouterHassanatesAuJoueur(leJoueur.getUniqueId(), 5);
+            }
+            else
+            {
+                leJoueur.getWorld().strikeLightning(leJoueur.getLocation()); // Frapper le joueur avec la foudre
+                Bukkit.broadcastMessage(ChatColor.RED + "Le kouffar "+ leJoueur.getName() + " a tué un animal sans respecter le rite sacré ! (+20 Péchés)");
 
+                ajouterPechesAuJoueur(leJoueur.getUniqueId(), 20);
+            }
         }
     }
 
@@ -216,6 +237,33 @@ public class HallalHandler implements Listener
         }.runTaskTimer(pluginRef, 0, 7);
 
         boussolesMecque.put(player, boussole);
+    }
+
+    public Boolean leJoueurEstTourneVersLaMecque(Player leJoueur)
+    {
+
+        Location laMecque = new Location(leJoueur.getWorld(), 0, 0, 0);
+        Location leJoueurPos = leJoueur.getLocation();
+        Vector directionVector = leJoueurPos.toVector().subtract(laMecque.toVector()).normalize();
+
+        // Calculer la différence de coordonnées entre la position du joueur et le point cible
+        double dx = laMecque.getX() - leJoueurPos.getX();
+        double dz = laMecque.getZ() - leJoueurPos.getZ();
+
+        // Calculer l'angle horizontal entre la direction actuelle du joueur et la direction vers le point cible
+        double angle = Math.toDegrees(Math.atan2(dz, dx)) - leJoueurPos.getYaw();
+
+        // Ajuster l'angle pour être dans la plage de 0 à 360 degrés
+        if (angle < 0) {
+            angle += 360;
+        }
+
+        if (angle >= 337.5 || angle < 22.5) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public String getDirectionText(Location playerLocation, Location targetLocation) {

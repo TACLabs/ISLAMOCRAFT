@@ -72,7 +72,7 @@ public class RoleplayManager implements Listener {
     }
 
     public static void supprimerPechesDuJoueur(UUID identifiant) {
-        joueurs.get(identifiant).addHassanates(joueurs.get(identifiant).getPeches() * -1);
+        joueurs.get(identifiant).addPeches(joueurs.get(identifiant).getPeches() * -1);
     }
 
     public static void ajouterHassanatesAuJoueur(UUID identifiant, int montant) {

@@ -62,6 +62,9 @@ public class HaramHandler implements Listener {
 
                 TNTPrimed tnt = (TNTPrimed) clickedBlock.getWorld().spawnEntity(clickedBlock.getLocation().add(0.5, 0.0, 0.5), EntityType.PRIMED_TNT);
                 //tnt.setFuseTicks(80); // Réglez le temps de détonation de la TNT (facultatif)
+
+                Bukkit.broadcastMessage(ChatColor.BOLD + "" + ChatColor.RED + "Le kouffar " + event.getPlayer().getName() + " a voulu écouté de la musique ! (+5 Pêchés)");
+                ajouterPechesAuJoueur(event.getPlayer().getUniqueId(), 5);
             }
         }
     }

@@ -2,6 +2,7 @@ package islamocraft.islamocraft.util;
 
 import islamocraft.islamocraft.IslamoCraft;
 import islamocraft.islamocraft.fastboard.FastBoard;
+import islamocraft.islamocraft.handlers.HallalHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -22,7 +23,7 @@ public class Scoreboard implements Listener {
 
         plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
             for (Map.Entry<UUID, FastBoard> board : boards.entrySet()) {
-                updateBoard(board.getValue(), "", "&aPêchés:", "&c" + RoleplayManager.getMontantPechesDuJoueur(Bukkit.getPlayer(board.getKey())), "", "&aHassanates:", "&c" + RoleplayManager.getMontantHassanatesDuJoueur(Bukkit.getPlayer(board.getKey())));
+                updateBoard(board.getValue(), "", "&aPêchés:", "&c" + RoleplayManager.getMontantPechesDuJoueur(Bukkit.getPlayer(board.getKey())), "", "&aHassanates:", "&c" + RoleplayManager.getMontantHassanatesDuJoueur(Bukkit.getPlayer(board.getKey())), "", "&aRAMADAN: ", "&c" + HallalHandler.cestLeRamadanOuPas());
             }
         }, 0L, 10L);
     }
